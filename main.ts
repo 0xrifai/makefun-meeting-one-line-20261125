@@ -55,15 +55,21 @@ function validate(line: string): void {
   }
 }
 
-function main(): void {
-  validate(LINE);
-
+// Write the validated line to the absolute grader path. Kept as its
+// own small function so the writer's single responsibility is obvious
+// and easy to check: make the directory, then write the exact bytes.
+function writeEntry(line: string): void {
   // The grader runs this repo read-only, so the output must go to
   // the ABSOLUTE path /output/entry.txt -- never a relative output/
   // directory, which does not exist (and cannot be created) in the
   // read-only grading environment and fails grading with exit 1.
   mkdirSync("/output", { recursive: true });
-  writeFileSync("/output/entry.txt", LINE, "utf8");
+  writeFileSync("/output/entry.txt", line, "utf8");
+}
+
+function main(): void {
+  validate(LINE);
+  writeEntry(LINE);
 }
 
 main();
